@@ -2,7 +2,7 @@
 
 options:
   logging: CLOUD_LOGGING_ONLY
-  machineType: E2_HIGHCPU_8   # optional
+  machineType: E2_HIGHCPU_8   # optional: speed up builds
 
 substitutions:
   _REGION: northamerica-northeast1
@@ -10,23 +10,20 @@ substitutions:
   _SERVICE: coach-backend
   _IMAGE: ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}
 
-volumes:
-  - name: m2-cache
-    path: /root/.m2
-
 steps:
+  # 1) Build the JAR
   - name: gcr.io/cloud-builders/mvn
     args: ["-B", "-f", "pom.xml", "clean", "package", "-DskipTests"]
-    volumes:
-      - name: m2-cache
-        path: /root/.m2
 
+  # 2) Build Docker image
   - name: gcr.io/cloud-builders/docker
     args: ["build", "-t", "${_IMAGE}:$SHORT_SHA", "."]
 
+  # 3) Push image
   - name: gcr.io/cloud-builders/docker
     args: ["push", "${_IMAGE}:$SHORT_SHA"]
 
+  # 4) Deploy to Cloud Run (port 8080)
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     entrypoint: gcloud
     args:

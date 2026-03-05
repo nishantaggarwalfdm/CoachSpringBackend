@@ -19,7 +19,7 @@ public class CorsFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
 
         // ADD YOUR FRONTEND URL HERE
-        response.setHeader("Access-Control-Allow-Origin", "https://coach-frontend-419807603191.northamerica-northeast1.run.app");
+        response.setHeader("Access-Control-Allow-Origin", "https://coach-frontend-79505229087.northamerica-northeast1.run.app");
         response.setHeader("Vary", "Origin");
 
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");

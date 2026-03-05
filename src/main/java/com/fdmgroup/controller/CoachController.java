@@ -36,6 +36,7 @@ public class CoachController {
 	public List<Coach> getAllCoaches(){
 		System.out.println("get all request");
 		List<Coach> returnedCoaches=service.getAllCoaches();
+		System.out.println("hi");
 		return returnedCoaches;
 		//service.getAllcoaches();
 	}
